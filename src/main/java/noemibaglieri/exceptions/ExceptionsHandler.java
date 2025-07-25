@@ -3,6 +3,7 @@ package noemibaglieri.exceptions;
 import noemibaglieri.payloads.ErrorsDTO;
 import noemibaglieri.payloads.ErrorsWithListDTO;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -36,4 +37,14 @@ public class ExceptionsHandler {
         ex.printStackTrace();
         return new ErrorsDTO("An error occurred", LocalDateTime.now());
     }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorsDTO handleBadEnum(HttpMessageNotReadableException ex) {
+        return new ErrorsDTO(
+                "Bad request: invalid format or wrong enum value (status must be 'IN_PROGRESS' or 'COMPLETED')",
+                LocalDateTime.now()
+        );
+    }
+
 }

@@ -74,7 +74,7 @@ public class EmployeesService {
 
         Employee editedEmployee = this.employeesRepository.save(found);
 
-        log.info("The author with id " + found.getId() + " was successfully updated");
+        log.info("The employee with id " + found.getId() + " was successfully updated");
 
         return editedEmployee;
     }
