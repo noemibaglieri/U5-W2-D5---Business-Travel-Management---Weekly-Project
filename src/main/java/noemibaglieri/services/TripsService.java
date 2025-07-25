@@ -3,12 +3,14 @@ package noemibaglieri.services;
 import noemibaglieri.entities.Trip;
 import noemibaglieri.enums.TripStatus;
 import noemibaglieri.exceptions.BadEnumException;
+import noemibaglieri.exceptions.BadRequestException;
 import noemibaglieri.exceptions.NotFoundException;
 import noemibaglieri.payloads.NewTripDTO;
 import noemibaglieri.repositories.TripsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -18,16 +20,21 @@ public class TripsService {
     private TripsRepository tripsRepository;
 
     public Trip save(NewTripDTO payload) {
+
+        if (tripsRepository.existsByDestinationAndDateOfTravelAndStatus(payload.destination(), payload.dateOfTravel(), TripStatus.IN_PROGRESS)) {
+            throw new BadRequestException("A trip to " + payload.destination() + " on " + payload.dateOfTravel() + " is already in progress.");
+        }
+
         Trip newTrip = new Trip(payload.destination(), payload.dateOfTravel(), payload.status());
-        return tripsRepository.save(newTrip);
+        return this.tripsRepository.save(newTrip);
     }
 
     public List<Trip> findAll() {
-        return tripsRepository.findAll();
+        return this.tripsRepository.findAll();
     }
 
     public Trip findById(long tripId) {
-        return tripsRepository.findById(tripId)
+        return this.tripsRepository.findById(tripId)
                 .orElseThrow(() -> new NotFoundException(tripId));
     }
 
@@ -36,7 +43,7 @@ public class TripsService {
         found.setDestination(payload.destination());
         found.setDateOfTravel(payload.dateOfTravel());
         found.setStatus(payload.status());
-        return tripsRepository.save(found);
+        return this.tripsRepository.save(found);
     }
 
     public void findByIdAndDelete(long tripId) {
@@ -57,5 +64,14 @@ public class TripsService {
     public List<Trip> findByStatus(TripStatus status) {
         return tripsRepository.findByStatus(status);
     }
+
+    public List<Trip> findByDateOfTravel(LocalDate date) {
+        return tripsRepository.findByDateOfTravel(date);
+    }
+
+    public List<Trip> findByDestination(String destination) {
+        return tripsRepository.findByDestination(destination);
+    }
+
 
 }

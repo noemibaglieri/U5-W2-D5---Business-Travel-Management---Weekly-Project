@@ -15,10 +15,12 @@ public class Booking {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Setter(AccessLevel.NONE)
     private long id;
 
-    @Column(name = "requested_trip_date", nullable = false)
-    private LocalDate requestedTripDate;
+    @Column(name = "requested_on")
+    @Setter(AccessLevel.NONE)
+    private LocalDate requestedOn;
 
     @Column(name = "special_requests", nullable = false, length = 1000)
     private String specialRequests;
@@ -31,8 +33,8 @@ public class Booking {
     @JoinColumn(name = "trip_id", nullable = false)
     private Trip trip;
 
-    public Booking(LocalDate requestedTripDate, String specialRequests, Employee employee, Trip trip) {
-        this.requestedTripDate = requestedTripDate;
+    public Booking(String specialRequests, Employee employee, Trip trip) {
+        this.requestedOn = LocalDate.now();
         this.specialRequests = specialRequests;
         this.employee = employee;
         this.trip = trip;

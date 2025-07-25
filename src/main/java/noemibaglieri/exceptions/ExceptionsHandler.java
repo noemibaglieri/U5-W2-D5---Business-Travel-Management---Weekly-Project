@@ -42,9 +42,15 @@ public class ExceptionsHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorsDTO handleBadEnum(HttpMessageNotReadableException ex) {
         return new ErrorsDTO(
-                "Bad request: invalid format or wrong enum value (status must be 'IN_PROGRESS' or 'COMPLETED')",
+                "Invalid format or wrong enum value (status must be 'IN_PROGRESS' or 'COMPLETED')",
                 LocalDateTime.now()
         );
+    }
+
+    @ExceptionHandler(NoBookingsFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorsDTO handleNoBookings(NoBookingsFoundException ex) {
+        return new ErrorsDTO(ex.getMessage(), LocalDateTime.now());
     }
 
 }

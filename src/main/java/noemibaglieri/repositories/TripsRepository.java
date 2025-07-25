@@ -13,6 +13,8 @@ public interface TripsRepository extends JpaRepository<Trip, Long> {
 
     List<Trip> findByStatus(TripStatus status);
 
+    boolean existsByDestinationAndDateOfTravelAndStatus(String destination, LocalDate dateOfTravel, TripStatus status);
+
     List<Trip> findByDateOfTravel(LocalDate dateOfTravel);
 
     List<Trip> findByDestination(String destination);

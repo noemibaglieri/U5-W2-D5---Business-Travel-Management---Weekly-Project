@@ -12,9 +12,9 @@ public record NewTripDTO(
         String destination,
 
         @NotNull(message = "Trip date is required.")
+        @FutureOrPresent(message = "The requested date must be today or in the future")
         LocalDate dateOfTravel,
 
         @NotNull(message = "Trip status is required.")
         TripStatus status) {
-
 }
