@@ -28,6 +28,9 @@ public class Employee {
     @Column(nullable = false, unique = true)
     private String username;
 
+    @Column(name = "profile_image")
+    private String profileImage;
+
     public Employee(String firstName, String lastName, String email, String username) {
         this.firstName = firstName;
         this.lastName = lastName;
